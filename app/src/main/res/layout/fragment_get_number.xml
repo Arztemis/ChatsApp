@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_Primary">
+
+        <ImageView
+            android:id="@+id/imgNumber"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/group_2" />
+
+        <TextView
+            android:id="@+id/tvYourNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgNumber"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/font_avenir"
+            android:text="Verify your number"
+            android:textColor="@color/color_Accent"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvEnterNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvYourNumber"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/font_avenir"
+            android:text="Enter your number for verification"
+            android:textColor="@color/color_Accent"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvEnterNumber"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="20dp">
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/codePicker"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                app:ccpDialog_showFlag="true"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_autoDetectLanguage="true"
+                app:ccp_autoFormatNumber="true"
+                app:ccp_contentColor="@color/color_Accent"
+                app:ccp_showFlag="false" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="33dp"
+                android:layout_marginVertical="2dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/color_Accent" />
+
+            <EditText
+                android:id="@+id/edtNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:backgroundTint="@color/color_Accent"
+                android:hint="Number"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:maxLength="10"
+                android:textColor="@color/color_Accent"
+                android:textColorHint="@color/color_Accent"
+                android:textCursorDrawable="@null" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btGenerate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/button_background"
+            android:text="GENERATE OTP"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <RelativeLayout
+            android:id="@+id/progressLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/progressBar"
+                style="@style/SpinKitView.CubeGrid"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:SpinKit_Color="@color/color_Accent"
+                app:spinnerColor="@color/color_Accent" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_Primary"
+        tools:context=".fragment.VerifyNumberFragment">
+
+        <ImageView
+            android:id="@+id/imgGetNumber"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/group_3" />
+
+        <TextView
+            android:id="@+id/tvOTP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgGetNumber"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/font_avenir"
+            android:text="ENTER YOUR OTP"
+            android:textColor="@color/color_Accent"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvVerify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvOTP"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:text="We have sent you an OTP for\nverification phone number"
+            android:textColor="@color/color_Accent"
+            android:textSize="20dp" />
+
+        <com.chaos.view.PinView
+            android:id="@+id/pinView"
+            style="@style/PinWidget.PinView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvVerify"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:cursorVisible="true"
+            android:hint="------"
+            android:inputType="number"
+            android:padding="5dp"
+            android:textColor="@color/color_Accent"
+            android:textColorHint="@color/color_Accent"
+            android:textSize="18sp"
+            app:cursorColor="@color/color_Primary"
+            app:cursorWidth="2dp"
+            app:hideLineWhenFilled="false"
+            app:itemCount="6"
+            app:itemHeight="48dp"
+            app:itemRadius="4dp"
+            app:itemSpacing="0dp"
+            app:itemWidth="48dp"
+            app:lineColor="@color/color_Accent"
+            app:lineWidth="2dp"
+            app:viewType="rectangle" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btVerify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pinView"
+            android:layout_marginHorizontal="65dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_background"
+            android:fontFamily="sans-serif"
+            android:text="VERIFY OTP"
+            android:textColor="#BA000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/progressLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
+
+             <com.gmail.samehadar.iosdialog.CamomileSpinner
+                android:id="@+id/progressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:spinnerColor="@color/color_Accent" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</layout>
