@@ -15,4 +15,15 @@ public class ProfileViewModel extends ViewModel {
         return profileRepository.getUser();
     }
 
+    public void editImage(String uri) {
+         profileRepository.editImage(uri);
+    }
+
+    public void editStatus(String status) {
+        profileRepository.editStatus(status);
+    }
+
+    public void edtUserName(String name) {
+        profileRepository.edtUserName(name);
+    }
 }
