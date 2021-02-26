@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.example.chatsapp.R;
 import com.example.chatsapp.activity.AllConstants;
 import com.example.chatsapp.databinding.FragmentGetNumberBinding;
+import com.example.chatsapp.permissons.Permissons;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -27,6 +28,7 @@ public class GetNumberFragment extends Fragment {
 
     private FragmentGetNumberBinding binding;
     private String number;
+    private Permissons permissons;
 
     public GetNumberFragment() {
         // Required empty public constructor
@@ -42,6 +44,10 @@ public class GetNumberFragment extends Fragment {
     }
 
     private void initView() {
+
+        permissons = new Permissons();
+        permissons.requestContact(getActivity());
+        permissons.requestStorage(getActivity());
 
         binding.btGenerate.setOnClickListener(v -> {
             checkNumber();

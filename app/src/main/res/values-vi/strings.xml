@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">ChatsApp</string>
+    <string name="appname">CHATS APP</string>
+    <string name="first_name">Họ của bạn</string>
+    <string name="last_name">Tên của bạn</string>
+    <string name="done">Hoàn tất</string>
+    <string name="search_friend">Tìm kiếm</string>
+    <string name="status">Cập nhật status của bạn</string>
+    <string name="generate_otp">Tạo mã OTP</string>
+    <string name="number">Nhập vào SĐT của bạn</string>
+    <string name="verify_your_number">Xác thực số điện thoại</string>
+    <string name="enter_your_number_for_verification">Điền số điện thoại của bạn để xác thực</string>
+    <string name="username">Họ và tên</string>
+    <string name="phone_number">Số điện thoại</string>
+    <string name="delete_account">Xóa tài khoản</string>
+    <string name="enter_your_otp">Nhập mã OTP</string>
+    <string name="we_have_sent_you_an_otp_for_nverification_phone_number">Mã xác thực sẽ được gửi về\nsố điện thoại của bạn</string>
+    <string name="verify_otp">Xác thực OTP</string>
+</resources>

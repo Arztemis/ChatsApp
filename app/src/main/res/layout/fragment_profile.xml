@@ -104,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_marginTop="10dp"
-                    app:cardElevation="10dp">
+                    app:cardElevation="3dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -115,7 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
-                            android:text="Username"
+                            android:text="@string/username"
                             android:textColor="@color/color_Primary"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -130,7 +130,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:text="First name"
+                                android:text="@string/first_name"
                                 android:textColor="@color/gray"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -139,7 +139,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Last name"
+                                android:text="@string/last_name"
                                 android:textColor="@color/gray"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -160,7 +160,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:text="First name"
+                                android:text="@string/first_name"
                                 android:textColor="@color/color_Primary"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
@@ -171,7 +171,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="24dp"
                                 android:layout_weight="1"
-                                android:text="Last name"
+                                android:text="@string/last_name"
                                 android:textColor="@color/color_Primary"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
@@ -183,7 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
                     android:layout_marginVertical="10dp"
-                    app:cardElevation="10dp">
+                    app:cardElevation="3dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -196,7 +196,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:padding="10dp"
-                            android:text="Phone Number"
+                            android:text="@string/phone_number"
                             android:textColor="@color/color_Primary"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -219,8 +219,7 @@
                     android:id="@+id/deleteCardView"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginVertical="10dp"
-                    app:cardElevation="10dp">
+                    app:cardElevation="3dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -228,7 +227,7 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:padding="7dp"
-                        android:text="Delete Account"
+                        android:text="@string/delete_account"
                         android:textColor="@color/color_Primary"
                         android:textSize="23dp"
                         android:textStyle="bold" />

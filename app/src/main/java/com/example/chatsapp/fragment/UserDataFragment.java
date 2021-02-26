@@ -69,7 +69,7 @@ public class UserDataFragment extends Fragment {
         storageReference = FirebaseStorage.getInstance().getReference();
         storagePath = firebaseAuth.getUid() + "Media/Profile_Image/profile";
 
-        binding.imgPickImage.setOnClickListener(v -> {
+        binding.userImage.setOnClickListener(v -> {
             if (isStoragePermissonOK()) {
                 pickImage();
             }
@@ -89,6 +89,8 @@ public class UserDataFragment extends Fragment {
             task.addOnCompleteListener(task1 -> {
                 String url = Objects.requireNonNull(task1.getResult()).toString();
                 Map<String, Object> map = new HashMap<>();
+                map.put("uID", firebaseAuth.getUid());
+                map.put("number", firebaseAuth.getCurrentUser().getPhoneNumber());
                 map.put("name", name);
                 map.put("status", status);
                 map.put("image", url);

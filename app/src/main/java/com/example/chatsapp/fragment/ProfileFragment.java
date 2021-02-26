@@ -29,7 +29,6 @@ import com.example.chatsapp.viewmodel.ProfileViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -75,7 +74,7 @@ public class ProfileFragment extends Fragment {
 //                Log.d("DUCKHANH", name);
 //                Log.d("DUCKHANH", userModel.getImage());
 //                Log.d("DUCKHANH", FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-                binding.tvProfileNumber.setText(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+                binding.tvProfileNumber.setText(userModel.getNumber());
                 if (name.contains(" ")) {
                     String[] split = name.split(" ");
                     binding.tvProfileFName.setText(split[0]);
@@ -92,7 +91,7 @@ public class ProfileFragment extends Fragment {
         };
         profileViewModel.getUser().observe(getViewLifecycleOwner(), observer);
 
-        binding.imgPickImage.setOnClickListener(view -> {
+        binding.imgProfile.setOnClickListener(view -> {
             if (permissons.isStorageOk(getContext())) {
                 pickImage();
             } else {
@@ -107,6 +106,8 @@ public class ProfileFragment extends Fragment {
 
             EditText editText = view1.findViewById(R.id.edtStatus);
             Button button = view1.findViewById(R.id.buttonDone);
+
+            editText.setText(binding.tvProfileStatus.getText().toString());
 
             button.setOnClickListener(v -> {
                 String status = editText.getText().toString().trim();

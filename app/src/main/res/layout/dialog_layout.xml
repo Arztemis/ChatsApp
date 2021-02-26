@@ -9,11 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edt_background"
-        android:hint="Status"
+        android:hint="@string/status"
         android:imeOptions="actionDone"
         android:inputType="textMultiLine|textLongMessage"
         android:padding="15dp"
         android:textColor="@color/black"
+        android:textCursorDrawable="@null"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -25,7 +26,7 @@
         android:layout_marginHorizontal="60dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/button_background1"
-        android:text="DONE"
+        android:text="@string/done"
         android:textColor="@color/white" />
 
 </RelativeLayout>
