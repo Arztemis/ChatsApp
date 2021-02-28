@@ -28,4 +28,14 @@ public class Permissons {
         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_CONTACTS}
                 , AllConstants.CONTACT_REQUEST_CODE);
     }
+
+    public boolean isSmsOk(Context context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requestSms(Activity activity) {
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECEIVE_SMS}
+                , AllConstants.SMS_REQUSET_CODE);
+    }
+
 }

@@ -21,6 +21,7 @@ import com.example.chatsapp.adapter.ContactAdapter;
 import com.example.chatsapp.databinding.FragmentContactBinding;
 import com.example.chatsapp.model.UserModel;
 import com.example.chatsapp.permissons.Permissons;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +38,8 @@ public class ContactFragment extends Fragment {
     private DatabaseReference databaseReference;
     private Permissons permissons;
     private ArrayList<UserModel> userContacts, appContacts;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private View view;
 
     public ContactFragment() {
         // Required empty public constructor
@@ -47,17 +50,14 @@ public class ContactFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contact, container, false);
-
+        view = binding.getRoot();
         permissons = new Permissons();
         userContacts = new ArrayList<>();
-
-
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recycleView.setHasFixedSize(true);
-
         getUserContact();
 
-        return binding.getRoot();
+        return view;
     }
 
     private void getUserContact() {
@@ -88,10 +88,8 @@ public class ContactFragment extends Fragment {
                     }
                 }
                 cursor.close();
-
                 getAppContacts(userContacts);
             }
-
         } else {
             permissons.requestContact(getActivity());
         }
@@ -131,6 +129,11 @@ public class ContactFragment extends Fragment {
                     }
                     ContactAdapter adapter = new ContactAdapter(getContext(), appContacts);
                     binding.recycleView.setAdapter(adapter);
+
+                    binding.recycleView.setVisibility(View.VISIBLE);
+                    //Stop hide Shimmer
+                    binding.shimmerlayout.shimmerlayout.stopShimmer();
+                    binding.shimmerlayout.shimmerlayout.setVisibility(View.GONE);
                 }
             }
 
@@ -147,11 +150,16 @@ public class ContactFragment extends Fragment {
         switch (requestCode) {
             case AllConstants.CONTACT_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getUserContact();
+//                    getUserContact();
                 } else {
                     Toast.makeText(getContext(), "Contact permisson denied", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

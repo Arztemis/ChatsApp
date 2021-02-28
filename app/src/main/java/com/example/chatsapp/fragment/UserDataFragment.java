@@ -13,10 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.example.chatsapp.R;
 import com.example.chatsapp.activity.DashBoardActivity;
 import com.example.chatsapp.databinding.FragmentUserDataBinding;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +25,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,10 +50,10 @@ public class UserDataFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_data, container, false);
+        binding = FragmentUserDataBinding.inflate(inflater, container, false);
         initView();
         return binding.getRoot();
     }
@@ -76,8 +76,8 @@ public class UserDataFragment extends Fragment {
         });
 
         binding.btDone.setOnClickListener(v -> {
-            progressDialog.show();
             if (checkName() && checkStatus() && checkImage()) {
+                progressDialog.show();
                 uploadData();
             }
         });
@@ -133,7 +133,7 @@ public class UserDataFragment extends Fragment {
         switch (requestCode) {
             case 100:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    pickImage();
+//                    pickImage();
                 } else {
                     Toast.makeText(getContext(), "Permisson Denied", Toast.LENGTH_SHORT).show();
                 }

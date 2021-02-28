@@ -7,23 +7,27 @@
     android:background="@color/color_Primary"
     tools:context=".activity.SplashActivity">
 
-    <ImageView
-        android:id="@+id/imgsplash"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lotteAnim"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/group_1" />
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/data"
+        app:lottie_speed="1" />
 
     <TextView
+        android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imgsplash"
+        android:layout_below="@id/lotteAnim"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="@string/appname"
         android:fontFamily="@font/font_avenir"
-        android:textStyle="bold"
+        android:text="@string/appname"
         android:textColor="@color/color_Accent"
-        android:textSize="30dp" />
+        android:textSize="30dp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

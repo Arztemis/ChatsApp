@@ -1,22 +1,24 @@
 package com.example.chatsapp.fragment;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.databinding.DataBindingUtil;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.chatsapp.R;
 import com.example.chatsapp.activity.AllConstants;
+import com.example.chatsapp.activity.OTPReciever;
 import com.example.chatsapp.databinding.FragmentVerifyNumberBinding;
+import com.example.chatsapp.permissons.Permissons;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-
-import java.util.Objects;
 
 
 public class VerifyNumberFragment extends Fragment {
@@ -24,6 +26,7 @@ public class VerifyNumberFragment extends Fragment {
     private FragmentVerifyNumberBinding binding;
     private String verificationId, pin;
     private FirebaseAuth firebaseAuth;
+    private Permissons permissons;
 
     public VerifyNumberFragment() {
         // Required empty public constructor
@@ -33,7 +36,7 @@ public class VerifyNumberFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_verify_number, container, false);
+        binding = FragmentVerifyNumberBinding.inflate(inflater, container, false);
         initView();
         return binding.getRoot();
     }
@@ -43,36 +46,35 @@ public class VerifyNumberFragment extends Fragment {
         //Khởi tạo để dùng các thực thể duy nhất trong class FirebaseAuth
         firebaseAuth = FirebaseAuth.getInstance();
 
-        //Lấy dữ liệu được đóng gói qua Bundle
+        //Khởi tạo permisson
+        permissons = new Permissons();
+        permissons.requestSms(getActivity());
+        //khởi tạo pinView cho OTP Reciever
+        new OTPReciever().setPinView(binding.pinView);
+        //Lấy dữ liệu được đóng gói qua Bundle từ GetNumberFragment
         Bundle bundle = getArguments();
         if (bundle != null) {
             verificationId = bundle.getString(AllConstants.VERIFICATION_ID);
         }
 
         binding.btVerify.setOnClickListener(v -> {
-
-            checkPin();
-            if (checkPin()) {
-                binding.progressLayout.setVisibility(View.VISIBLE);
-                binding.progressBar.start();
-
-                verifyPin(pin);
-            }
+            pin = binding.pinView.getText().toString();
+//            Log.d("DUCKHANH", "Pin: " + binding.pinView.getText().toString());
+            binding.progressLayout.setVisibility(View.VISIBLE);
+            binding.progressBar.start();
+            verifyPin(pin);
         });
     }
 
-    private boolean checkPin() {
-
-        pin = Objects.requireNonNull(binding.pinView.getText()).toString();
-        if (pin.isEmpty()) {
-            binding.pinView.setError("Enter the PIN");
-            return false;
-        } else if (pin.length() < 6) {
-            binding.pinView.setError("Invalid OTP");
-            return false;
-        } else {
-            binding.pinView.setError(null);
-            return true;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == AllConstants.SMS_REQUSET_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(), "Permisson SMS accecpt", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Permisson SMS denied", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -88,7 +90,6 @@ public class VerifyNumberFragment extends Fragment {
                 getFragmentManager().beginTransaction().replace(R.id.container, new UserDataFragment()).commit();
             } else {
                 Toast.makeText(getContext(), "" + task.getException(), Toast.LENGTH_SHORT).show();
-                binding.btVerify.setEnabled(false);
             }
         });
     }

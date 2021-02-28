@@ -33,14 +33,8 @@ public class EditNameActivity extends AppCompatActivity {
             binding.edtLName.setText(name);
         }
 
-
         binding.buttonEditName.setOnClickListener(v -> {
-            if (checkFname() && checkLname()) {
-                Intent intent = new Intent();
-                intent.putExtra("name", fName + " " + lName);
-                setResult(AllConstants.CODE, intent);
-                finish();
-            }
+            senDataNameBack();
         });
 
         setContentView(binding.getRoot());
@@ -49,6 +43,16 @@ public class EditNameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        senDataNameBack();
+    }
+
+    private void senDataNameBack() {
+        if (checkFname() && checkLname()) {
+            Intent intent = new Intent();
+            intent.putExtra("name", fName + " " + lName);
+            setResult(AllConstants.CODE, intent);
+            finish();
+        }
     }
 
     private boolean checkFname() {

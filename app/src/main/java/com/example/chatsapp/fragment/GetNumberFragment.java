@@ -76,7 +76,6 @@ public class GetNumberFragment extends Fragment {
 
     private void sendOTP(String phoneNumber) {
         binding.progressLayout.setVisibility(View.VISIBLE);
-//      binding.progressBar.start();
 
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder()
                 .setPhoneNumber(phoneNumber)
@@ -120,6 +119,7 @@ public class GetNumberFragment extends Fragment {
                             .setCustomAnimations(R.anim.fade_in, R.anim.fade_in)
                             .commit();
                     binding.progressLayout.setVisibility(View.VISIBLE);
+                    binding.btGenerate.setEnabled(false);
                 }
             };
 

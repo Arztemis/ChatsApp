@@ -64,6 +64,7 @@ public class ProfileFragment extends Fragment {
         util = new Util();
         permissons = new Permissons();
 
+        //Đăng ký observer theo mô hình MVVM để theo dõi livedata
 //        Log.d("DUCKHANH", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getPhoneNumber());
         Observer<UserModel> observer = new Observer<UserModel>() {
             @Override
@@ -91,6 +92,7 @@ public class ProfileFragment extends Fragment {
         };
         profileViewModel.getUser().observe(getViewLifecycleOwner(), observer);
 
+        //Check quyền users cho truy cập storage để cập nhật ảnh đại diện
         binding.imgProfile.setOnClickListener(view -> {
             if (permissons.isStorageOk(getContext())) {
                 pickImage();
@@ -99,6 +101,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        //Tạo 1 AlertDialog, mục đích hiện thị diaglog_layout để cập nhật status
         binding.imgEditStatus.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             View view1 = LayoutInflater.from(getContext()).inflate(R.layout.dialog_layout, null);
@@ -146,6 +149,7 @@ public class ProfileFragment extends Fragment {
     }
 
 
+    //Override lại method này để nhận dữ liệu trả về, luôn đi kèm với phương thức startActivityforResult
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode) {

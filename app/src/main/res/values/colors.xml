@@ -12,4 +12,5 @@
     <color name="color_gray">#DDDDDD</color>
     <color name="color_green">#4CAF50</color>
     <color name="color_blue">#009688</color>
+    <color name="shimmer">#ECECEC</color>
 </resources>

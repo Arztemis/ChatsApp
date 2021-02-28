@@ -1,6 +1,7 @@
 package com.example.chatsapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -9,6 +10,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatsapp.R;
+import com.example.chatsapp.activity.UserInfoActivity;
 import com.example.chatsapp.databinding.ContactItemLayoutBinding;
 import com.example.chatsapp.model.UserModel;
 
@@ -36,8 +38,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UserModel userModel = list.get(position);
+        //Set data
         holder.layoutBinding.setUserModel(userModel);
-
+        //set sự kiện click cho imagaview Info
+        holder.layoutBinding.container.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, UserInfoActivity.class);
+            intent.putExtra("userID", userModel.getuID());
+            mContext.startActivity(intent);
+        });
     }
 
     @Override
