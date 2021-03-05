@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="image"
+            type="String" />
+
+        <variable
+            name="activity"
+            type="com.example.chatsapp.activity.MessageActivity" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".activity.MessageActivity">
+
+        <include
+            android:id="@+id/toolBar"
+            layout="@layout/message_toolbar"
+            bind:activity="@{activity}"
+            bind:image="@{image}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/msgData"
+            android:layout_below="@id/toolBar"
+            android:clipToPadding="false" />
+
+        <LinearLayout
+            android:id="@+id/msgData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:weightSum="2">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center"
+                android:layout_weight=".25"
+                android:src="@drawable/ic_add" />
+
+            <EditText
+                android:id="@+id/msgText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:background="@drawable/edt_background"
+                android:hint="Write message"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/imgSend"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.25"
+                android:src="@drawable/ic_send" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</layout>

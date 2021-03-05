@@ -25,12 +25,12 @@ public class OTPReciever extends BroadcastReceiver {
         SmsMessage[] smsMessages = Telephony.Sms.Intents.getMessagesFromIntent(intent);
         for (SmsMessage sms : smsMessages) {
             String message = sms.getMessageBody();
-            Log.d("DUCKHANH", message);
+//            Log.d("DUCKHANH", message);
             Pattern pattern = Pattern.compile("(\\d\\d\\d\\d\\d\\d)");
             Matcher matcher = pattern.matcher(message);
             if (matcher.find()) {
                 String OTP = message.substring(matcher.start(), matcher.end());
-                Log.d("DUCKHANH", OTP);
+//                Log.d("DUCKHANH", OTP);
                 pinView.setText(OTP);
             }
 

@@ -2,7 +2,6 @@ package com.example.chatsapp.fragment;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +71,7 @@ public class VerifyNumberFragment extends Fragment {
         if (requestCode == AllConstants.SMS_REQUSET_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getContext(), "Permisson SMS accecpt", Toast.LENGTH_SHORT).show();
+
             } else {
                 Toast.makeText(getContext(), "Permisson SMS denied", Toast.LENGTH_SHORT).show();
             }

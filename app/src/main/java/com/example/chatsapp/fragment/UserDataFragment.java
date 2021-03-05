@@ -15,8 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.chatsapp.activity.AllConstants;
 import com.example.chatsapp.activity.DashBoardActivity;
 import com.example.chatsapp.databinding.FragmentUserDataBinding;
+import com.example.chatsapp.permissons.Permissons;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -84,6 +86,7 @@ public class UserDataFragment extends Fragment {
     }
 
     private void uploadData() {
+        imageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/chatsapp-49bea.appspot.com/o/ozUSqX8sAUeuALqDmZA0MP2meE53%2FMedia%2FProfile_Image%2Fprofile?alt=media&token=f3a5d8d4-60a5-4b31-b1c6-a9fb0dab6a44");
         storageReference.child(storagePath).putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
             Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
             task.addOnCompleteListener(task1 -> {
@@ -107,8 +110,6 @@ public class UserDataFragment extends Fragment {
                 });
             });
         });
-
-
     }
 
     private boolean isStoragePermissonOK() {
@@ -116,24 +117,20 @@ public class UserDataFragment extends Fragment {
                 == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
-            requestStoragePermisson();
+            new Permissons().requestStorage(UserDataFragment.this);
             return false;
         }
     }
 
-    private void requestStoragePermisson() {
-        ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                100);
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case 100:
+            case AllConstants.STORAGE_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    pickImage();
+                    pickImage();
+                    Toast.makeText(getContext(), "Permisson Accept", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Permisson Denied", Toast.LENGTH_SHORT).show();
                 }
@@ -184,6 +181,7 @@ public class UserDataFragment extends Fragment {
     }
 
     private boolean checkImage() {
+        imageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/chatsapp-49bea.appspot.com/o/ozUSqX8sAUeuALqDmZA0MP2meE53%2FMedia%2FProfile_Image%2Fprofile?alt=media&token=f3a5d8d4-60a5-4b31-b1c6-a9fb0dab6a44");
         if (imageUri == null) {
             Toast.makeText(getContext(), "Image is required", Toast.LENGTH_SHORT).show();
             return false;

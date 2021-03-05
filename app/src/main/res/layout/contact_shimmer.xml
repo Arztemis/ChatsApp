@@ -12,7 +12,7 @@
         tools:context=".fragment.ContactFragment">
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmerlayout"
+            android:id="@+id/shimmerFrameLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible"

@@ -24,6 +24,9 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         String uID = getIntent().getStringExtra("userID");
+        binding.imgBack.setOnClickListener(v -> {
+            onBackPressed();
+        });
 
         getUserDetail(uID);
 

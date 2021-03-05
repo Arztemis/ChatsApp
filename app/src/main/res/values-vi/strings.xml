@@ -16,4 +16,6 @@
     <string name="enter_your_otp">Nhập mã OTP</string>
     <string name="we_have_sent_you_an_otp_for_nverification_phone_number">Mã xác thực sẽ được gửi về\nsố điện thoại của bạn</string>
     <string name="verify_otp">Xác thực OTP</string>
+    <string name="user_info">Hồ sơ</string>
+    <string name="editname">Sửa họ và tên</string>
 </resources>

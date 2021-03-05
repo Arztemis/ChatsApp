@@ -5,12 +5,14 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,14 +34,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ContactFragment extends Fragment {
+public class ContactFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private FragmentContactBinding binding;
     private DatabaseReference databaseReference;
     private Permissons permissons;
     private ArrayList<UserModel> userContacts, appContacts;
     private ShimmerFrameLayout shimmerFrameLayout;
-    private View view;
+    private ContactAdapter contactAdapter;
 
     public ContactFragment() {
         // Required empty public constructor
@@ -50,12 +52,15 @@ public class ContactFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contact, container, false);
-        view = binding.getRoot();
+        View view = binding.getRoot();
         permissons = new Permissons();
         userContacts = new ArrayList<>();
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recycleView.setHasFixedSize(true);
         getUserContact();
+
+        //Implement 2 phương thức onQuery
+        binding.contactSearchView.setOnQueryTextListener(this);
 
         return view;
     }
@@ -91,7 +96,7 @@ public class ContactFragment extends Fragment {
                 getAppContacts(userContacts);
             }
         } else {
-            permissons.requestContact(getActivity());
+            permissons.requestContact(ContactFragment.this);
         }
     }
 
@@ -127,13 +132,12 @@ public class ContactFragment extends Fragment {
                             }
                         }
                     }
-                    ContactAdapter adapter = new ContactAdapter(getContext(), appContacts);
-                    binding.recycleView.setAdapter(adapter);
-
+                    contactAdapter = new ContactAdapter(getContext(), appContacts);
+                    binding.recycleView.setAdapter(contactAdapter);
                     binding.recycleView.setVisibility(View.VISIBLE);
                     //Stop hide Shimmer
-                    binding.shimmerlayout.shimmerlayout.stopShimmer();
-                    binding.shimmerlayout.shimmerlayout.setVisibility(View.GONE);
+                    binding.shimmerlayout.shimmerFrameLayout.stopShimmer();
+                    binding.shimmerlayout.shimmerFrameLayout.setVisibility(View.GONE);
                 }
             }
 
@@ -147,19 +151,32 @@ public class ContactFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d("DUCKHANH", "request code: " + requestCode + "");
         switch (requestCode) {
             case AllConstants.CONTACT_REQUEST_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    getUserContact();
-                } else {
-                    Toast.makeText(getContext(), "Contact permisson denied", Toast.LENGTH_SHORT).show();
+                for (int i = 0; i < grantResults.length; i++) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        Log.d("DUCKHANH", grantResults[i] + "");
+                        getUserContact();
+                    } else {
+                        Toast.makeText(getContext(), "Contact permisson denied", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
         }
+
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (contactAdapter != null) {
+            contactAdapter.getFilter().filter(newText);
+        }
+        return false;
     }
 }

@@ -97,7 +97,7 @@ public class ProfileFragment extends Fragment {
             if (permissons.isStorageOk(getContext())) {
                 pickImage();
             } else {
-                permissons.requestStorage(getActivity());
+                permissons.requestStorage(ProfileFragment.this);
             }
         });
 

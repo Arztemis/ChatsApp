@@ -5,6 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".fragment.ContactFragment">
 
         <androidx.cardview.widget.CardView
@@ -20,17 +21,15 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <EditText
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/contactSearchView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
                     android:background="@drawable/edt_background"
-                    android:hint="@string/search_friend"
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@null"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    app:iconifiedByDefault="false"
+                    app:queryBackground="@null"
+                    app:queryHint="@string/search_friend" />
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

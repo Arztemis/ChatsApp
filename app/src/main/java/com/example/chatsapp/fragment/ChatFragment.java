@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.chatsapp.R;
+import com.example.chatsapp.databinding.FragmentChatBinding;
 
 public class ChatFragment extends Fragment {
+
+    private FragmentChatBinding binding;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -19,6 +21,7 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false);
+        binding = FragmentChatBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 }

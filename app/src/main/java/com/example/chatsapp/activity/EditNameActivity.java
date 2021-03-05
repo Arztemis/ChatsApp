@@ -18,6 +18,8 @@ public class EditNameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityEditNameBinding.inflate(getLayoutInflater());
 
+        binding.imgBack.setOnClickListener(v -> onBackPressed());
+
         String name = getIntent().getStringExtra("name").trim();
         Log.d("DUCKHANH", name);
         if (name.contains(" ")) {
@@ -33,9 +35,7 @@ public class EditNameActivity extends AppCompatActivity {
             binding.edtLName.setText(name);
         }
 
-        binding.buttonEditName.setOnClickListener(v -> {
-            senDataNameBack();
-        });
+        binding.buttonEditName.setOnClickListener(v -> senDataNameBack());
 
         setContentView(binding.getRoot());
 

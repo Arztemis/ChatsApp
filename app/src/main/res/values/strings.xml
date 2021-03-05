@@ -16,5 +16,7 @@
     <string name="enter_your_otp">ENTER YOUR OTP</string>
     <string name="we_have_sent_you_an_otp_for_nverification_phone_number">We have sent you an OTP for\nverification phone number</string>
     <string name="verify_otp">VERIFY OTP</string>
+    <string name="user_info">User Info</string>
+    <string name="editname">Edit Name</string>
 
 </resources>
