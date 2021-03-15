@@ -2,7 +2,6 @@ package com.example.chatsapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -58,6 +57,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, MessageActivity.class);
             intent.putExtra("hisID", userModel.getuID());
+            intent.putExtra("hisName", userModel.getName());
             intent.putExtra("hisImage", userModel.getImage());
 //            Log.d("DUCKHANH", userModel.getImage());
             mContext.startActivity(intent);

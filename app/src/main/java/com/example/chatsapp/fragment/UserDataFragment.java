@@ -86,7 +86,7 @@ public class UserDataFragment extends Fragment {
     }
 
     private void uploadData() {
-        imageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/chatsapp-49bea.appspot.com/o/ozUSqX8sAUeuALqDmZA0MP2meE53%2FMedia%2FProfile_Image%2Fprofile?alt=media&token=f3a5d8d4-60a5-4b31-b1c6-a9fb0dab6a44");
+//        imageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/chatsapp-49bea.appspot.com/o/ozUSqX8sAUeuALqDmZA0MP2meE53%2FMedia%2FProfile_Image%2Fprofile?alt=media&token=f3a5d8d4-60a5-4b31-b1c6-a9fb0dab6a44");
         storageReference.child(storagePath).putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
             Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
             task.addOnCompleteListener(task1 -> {
@@ -181,7 +181,6 @@ public class UserDataFragment extends Fragment {
     }
 
     private boolean checkImage() {
-        imageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/chatsapp-49bea.appspot.com/o/ozUSqX8sAUeuALqDmZA0MP2meE53%2FMedia%2FProfile_Image%2Fprofile?alt=media&token=f3a5d8d4-60a5-4b31-b1c6-a9fb0dab6a44");
         if (imageUri == null) {
             Toast.makeText(getContext(), "Image is required", Toast.LENGTH_SHORT).show();
             return false;

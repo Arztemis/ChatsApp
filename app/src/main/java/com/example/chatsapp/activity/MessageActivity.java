@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class MessageActivity extends AppCompatActivity {
     private ActivityMessageBinding binding;
-    private String hisID, hisImage, myID, chatID = null;
+    private String hisID, hisImage, myID, chatID, hisName = null;
     private Util util;
     private DatabaseReference databaseReference;
     private FirebaseRecyclerAdapter<MessageModel, ViewHolder> firebaseRecyclerAdapter;
@@ -54,8 +54,10 @@ public class MessageActivity extends AppCompatActivity {
 
         hisID = getIntent().getStringExtra("hisID");
         hisImage = getIntent().getStringExtra("hisImage");
+        hisName = getIntent().getStringExtra("hisName");
 
         binding.setImage(hisImage);
+        binding.setName(hisName);
         binding.setActivity(this);
 
         if (chatID == null) {
@@ -103,15 +105,15 @@ public class MessageActivity extends AppCompatActivity {
     private void createChat(String msg) {
         databaseReference = FirebaseDatabase.getInstance().getReference("ChatList").child(myID);
         chatID = databaseReference.push().getKey();
-        ChatListModel chatListModel = new ChatListModel(chatID, util.currentData(), msg, hisID);
+        ChatListModel chatListModel = new ChatListModel(chatID, util.currentDate(), msg, hisID);
         databaseReference.child(chatID).setValue(chatListModel);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("ChatList").child(hisID);
-        ChatListModel chatList = new ChatListModel(chatID, util.currentData(), msg, myID);
+        ChatListModel chatList = new ChatListModel(chatID, util.currentDate(), msg, myID);
         databaseReference.child(chatID).setValue(chatList);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Chat").child(chatID);
-        MessageModel messageModel = new MessageModel(myID, hisID, msg, util.currentData(), "text");
+        MessageModel messageModel = new MessageModel(myID, hisID, msg, util.currentDate(), "text");
         databaseReference.push().setValue(messageModel);
 
 
@@ -122,7 +124,7 @@ public class MessageActivity extends AppCompatActivity {
             createChat(msg);
 
         } else {
-            String date = util.currentData();
+            String date = util.currentDate();
             MessageModel messageModel = new MessageModel(myID, hisID, msg, date, "text");
             databaseReference = FirebaseDatabase.getInstance().getReference("Chat").child(chatID);
             databaseReference.push().setValue(messageModel);
@@ -201,10 +203,18 @@ public class MessageActivity extends AppCompatActivity {
         };
 
 
-        binding.recyclerViewMessage.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerViewMessage.setHasFixedSize(false);
         binding.recyclerViewMessage.setAdapter(firebaseRecyclerAdapter);
+        binding.recyclerViewMessage.smoothScrollToPosition(binding.recyclerViewMessage.getAdapter().getItemCount());
         firebaseRecyclerAdapter.startListening();
+    }
+
+    @Override
+    protected void onStart() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        binding.recyclerViewMessage.setLayoutManager(linearLayoutManager);
+        super.onStart();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

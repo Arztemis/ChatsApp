@@ -8,6 +8,10 @@
             type="String" />
 
         <variable
+            name="name"
+            type="String" />
+
+        <variable
             name="activity"
             type="com.example.chatsapp.activity.MessageActivity" />
 
@@ -16,7 +20,7 @@
     <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:background="@color/color_Primary">
 
         <RelativeLayout
@@ -38,9 +42,20 @@
                 imageUrl="@{image}"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                app:civ_border_color="?attr/colorControlNormal"
-                app:civ_border_width="1dp" />
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:layout_toEndOf="@id/img_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/imgMess"
+                android:text="@{name}"
+                android:textColor="@color/color_Accent"
+                android:textSize="18sp"
+                 />
 
             <ImageView
                 android:layout_width="25dp"

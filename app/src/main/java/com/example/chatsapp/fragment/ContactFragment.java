@@ -40,7 +40,6 @@ public class ContactFragment extends Fragment implements SearchView.OnQueryTextL
     private DatabaseReference databaseReference;
     private Permissons permissons;
     private ArrayList<UserModel> userContacts, appContacts;
-    private ShimmerFrameLayout shimmerFrameLayout;
     private ContactAdapter contactAdapter;
 
     public ContactFragment() {
