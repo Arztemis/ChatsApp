@@ -12,6 +12,10 @@
             type="String" />
 
         <variable
+            name="status"
+            type="String" />
+
+        <variable
             name="activity"
             type="com.example.chatsapp.activity.MessageActivity" />
 
@@ -37,14 +41,29 @@
                 android:onClick="@{()->activity.onBackPressed()}"
                 android:src="@drawable/ic_back" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/imgMess"
-                imageUrl="@{image}"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
-                android:layout_toEndOf="@id/img_back" />
+                android:layout_toEndOf="@id/img_back">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgUser"
+                    imageUrl="@{image}"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/user_image" />
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:src="@{status.equals(`online`) ? @drawable/ic_online:@drawable/ic_offline}"
+                    app:layout_anchor="@id/imgUser"
+                    app:layout_anchorGravity="bottom|right" />
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -54,8 +73,7 @@
                 android:layout_toEndOf="@id/imgMess"
                 android:text="@{name}"
                 android:textColor="@color/color_Accent"
-                android:textSize="18sp"
-                 />
+                android:textSize="18sp" />
 
             <ImageView
                 android:layout_width="25dp"

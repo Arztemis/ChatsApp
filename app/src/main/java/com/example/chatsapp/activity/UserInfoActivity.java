@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chatsapp.databinding.ActivityUserInfoBinding;
 import com.example.chatsapp.model.UserModel;
+import com.example.chatsapp.utils.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,13 +17,14 @@ import com.google.firebase.database.ValueEventListener;
 public class UserInfoActivity extends AppCompatActivity {
 
     private ActivityUserInfoBinding binding;
+    private Util util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityUserInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        util = new Util();
         String uID = getIntent().getStringExtra("userID");
         binding.imgBack.setOnClickListener(v -> {
             onBackPressed();
@@ -64,4 +66,17 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        util.updateOnlineStatus("online");
+        super.onResume();
+    }
+
+//    @Override
+//    protected void onPause() {
+//        util.updateOnlineStatus("offline");
+//        super.onPause();
+//    }
+
 }

@@ -1,17 +1,26 @@
 package com.example.chatsapp.model;
 
 public class ChatModel {
-    private String chatID, name, lastMessage, image, date;
+    private String chatID, name, lastMessage, image, date, online;
 
     public ChatModel() {
     }
 
-    public ChatModel(String chatID, String name, String lastMessage, String image, String date) {
+    public ChatModel(String chatID, String name, String lastMessage, String image, String date, String online) {
         this.chatID = chatID;
         this.name = name;
         this.lastMessage = lastMessage;
         this.image = image;
         this.date = date;
+        this.online = online;
+    }
+
+    public String getOnline() {
+        return online;
+    }
+
+    public void setOnline(String online) {
+        this.online = online;
     }
 
     public String getChatID() {

@@ -69,6 +69,7 @@ public class ChatFragment extends Fragment {
                             Date time = null;
                             String name = snapshot.child("name").getValue().toString();
                             String image = snapshot.child("image").getValue().toString();
+                            String online = snapshot.child("online").getValue().toString();
                             Calendar calendar = Calendar.getInstance();
                             try {
                                 time = Util.sdf().parse(model.getDateTime());
@@ -79,7 +80,7 @@ public class ChatFragment extends Fragment {
                             calendar.setTime(time);
                             String date = Util.getTimeAgo(calendar.getTimeInMillis());
                             ChatModel chatModel = new ChatModel(model.getChatListID(), name,
-                                    model.getLastMessage(), image, date);
+                                    model.getLastMessage(), image, date, online);
                             holder.binding.setChatModel(chatModel);
                         }
                     }
@@ -103,10 +104,10 @@ public class ChatFragment extends Fragment {
         binding.recycleViewChat.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recycleViewChat.setHasFixedSize(false);
         binding.recycleViewChat.setAdapter(firebaseRecyclerAdapter);
-//        binding.recycleViewChat.setVisibility(View.VISIBLE);
-//        binding.shimmerlayout.shimmerFrameLayout.stopShimmer();
-//        binding.shimmerlayout.shimmerFrameLayout.setVisibility(View.GONE);
 
+        binding.shimmerlayout.shimmerFrameLayout.stopShimmer();
+        binding.shimmerlayout.shimmerFrameLayout.setVisibility(View.GONE);
+        binding.recycleViewChat.setVisibility(View.VISIBLE);
 
     }
 
@@ -122,6 +123,7 @@ public class ChatFragment extends Fragment {
 
     @Override
     public void onResume() {
+        util.updateOnlineStatus("online");
         firebaseRecyclerAdapter.startListening();
         super.onResume();
     }

@@ -7,17 +7,35 @@ import com.bumptech.glide.Glide;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserModel {
-    String name, status, image, number, uID;
+    String name, status, image, number, uID, online, typing;
 
-    public UserModel(String name, String status, String image, String number, String uID) {
+    public UserModel(String name, String status, String image, String number, String uID, String online, String typing) {
         this.name = name;
         this.status = status;
         this.image = image;
         this.number = number;
         this.uID = uID;
+        this.online = online;
+        this.typing = typing;
+    }
+
+    public String getTyping() {
+        return typing;
+    }
+
+    public void setTyping(String typing) {
+        this.typing = typing;
     }
 
     public UserModel() {
+    }
+
+    public String getOnline() {
+        return online;
+    }
+
+    public void setOnline(String online) {
+        this.online = online;
     }
 
     public String getName() {

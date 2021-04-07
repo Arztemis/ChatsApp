@@ -9,16 +9,19 @@ import com.example.chatsapp.R;
 import com.example.chatsapp.fragment.ChatFragment;
 import com.example.chatsapp.fragment.ContactFragment;
 import com.example.chatsapp.fragment.ProfileFragment;
+import com.example.chatsapp.utils.Util;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 public class DashBoardActivity extends AppCompatActivity {
 
     private Fragment fragment = null;
+    private Util util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+        util = new Util();
 
         ChipNavigationBar navigationBar = findViewById(R.id.navigationChip);
 
@@ -54,4 +57,15 @@ public class DashBoardActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        util.updateOnlineStatus("online");
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        util.updateOnlineStatus("offline");
+        super.onStop();
+    }
 }

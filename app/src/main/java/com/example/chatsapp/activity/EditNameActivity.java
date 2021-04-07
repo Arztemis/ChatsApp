@@ -7,17 +7,19 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chatsapp.databinding.ActivityEditNameBinding;
+import com.example.chatsapp.utils.Util;
 
 public class EditNameActivity extends AppCompatActivity {
 
-    ActivityEditNameBinding binding;
+    private ActivityEditNameBinding binding;
     private String fName, lName;
+    private Util util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityEditNameBinding.inflate(getLayoutInflater());
-
+        util = new Util();
         binding.imgBack.setOnClickListener(v -> onBackPressed());
 
         String name = getIntent().getStringExtra("name").trim();
@@ -76,4 +78,16 @@ public class EditNameActivity extends AppCompatActivity {
             return true;
         }
     }
+
+    @Override
+    protected void onResume() {
+        util.updateOnlineStatus("online");
+        super.onResume();
+    }
+
+//    @Override
+//    protected void onPause() {
+//        util.updateOnlineStatus("offline");
+//        super.onPause();
+//    }
 }

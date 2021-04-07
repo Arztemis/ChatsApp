@@ -84,17 +84,30 @@
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgChatImage"
-            imageUrl="@{chatModel.image}"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignTop="@id/container"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="7dp"
             android:layout_marginTop="8dp"
-            android:elevation="10dp" />
+            android:elevation="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgChatImage"
+                imageUrl="@{chatModel.image}"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/user_image" />
+
+            <ImageView
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:src="@{chatModel.online.equals(`online`)? @drawable/ic_online:@drawable/ic_offline}"
+                app:layout_anchor="@id/imgChatImage"
+                app:layout_anchorGravity="end|bottom" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
     </RelativeLayout>

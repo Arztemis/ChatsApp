@@ -2,7 +2,10 @@ package com.example.chatsapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -58,7 +61,7 @@ public class MessageActivity extends AppCompatActivity {
 
         binding.setImage(hisImage);
         binding.setName(hisName);
-        binding.setActivity(this);
+        binding.setActivity(MessageActivity.this);
 
         if (chatID == null) {
             checkChat(hisID);
@@ -74,7 +77,26 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+        binding.msgText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().trim().length() == 0)
+                    updateTypingStatus("false");
+                else updateTypingStatus(hisID);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        checkOnline(hisID);
     }
 
     private void checkChat(final String hisID) {
@@ -131,14 +153,14 @@ public class MessageActivity extends AppCompatActivity {
 
             Map<String, Object> map = new HashMap<>();
             map.put("lastMessage", msg);
-            map.put("date", date);
+            map.put("dateTime", date);
             databaseReference = FirebaseDatabase.getInstance().getReference("ChatList").child(myID).child(chatID);
             databaseReference.updateChildren(map);
 
             databaseReference = FirebaseDatabase.getInstance().getReference("ChatList").child(hisID).child(chatID);
             Map<String, Object> update = new HashMap<>();
             update.put("lastMessage", msg);
-            update.put("date", date);
+            update.put("dateTime", date);
             databaseReference.updateChildren(update);
         }
     }
@@ -152,7 +174,8 @@ public class MessageActivity extends AppCompatActivity {
     private void readMessages(String chatID) {
         Query query = FirebaseDatabase
                 .getInstance().getReference().child("Chat")
-                .child(chatID);
+                .child(chatID)
+                .limitToLast(50);
         FirebaseRecyclerOptions<MessageModel> options = new FirebaseRecyclerOptions.Builder<MessageModel>()
                 .setQuery(query, MessageModel.class).build();
         query.keepSynced(true);
@@ -204,18 +227,14 @@ public class MessageActivity extends AppCompatActivity {
 
 
         binding.recyclerViewMessage.setHasFixedSize(false);
-        binding.recyclerViewMessage.setAdapter(firebaseRecyclerAdapter);
-        binding.recyclerViewMessage.smoothScrollToPosition(binding.recyclerViewMessage.getAdapter().getItemCount());
-        firebaseRecyclerAdapter.startListening();
-    }
-
-    @Override
-    protected void onStart() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         binding.recyclerViewMessage.setLayoutManager(linearLayoutManager);
-        super.onStart();
+        binding.recyclerViewMessage.setAdapter(firebaseRecyclerAdapter);
+//        binding.recyclerViewMessage.smoothScrollToPosition(binding.recyclerViewMessage.getAdapter().getItemCount());
+        firebaseRecyclerAdapter.startListening();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -227,5 +246,50 @@ public class MessageActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        util.updateOnlineStatus("online");
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        updateTypingStatus("false");
+        super.onPause();
+    }
+
+    private void checkOnline(String hisID) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(hisID);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String online = snapshot.child("online").getValue().toString();
+                    binding.setStatus(online);
+                    String typing = snapshot.child("typing").getValue().toString();
+                    if (typing.equals(myID)) {
+                        binding.typingStatus.setVisibility(View.VISIBLE);
+                        binding.typingStatus.playAnimation();
+                    } else {
+                        binding.typingStatus.setVisibility(View.GONE);
+                        binding.typingStatus.cancelAnimation();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void updateTypingStatus(String status) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(myID);
+        Map<String, Object> map = new HashMap<>();
+        map.put("typing", status);
+        databaseReference.updateChildren(map);
+
+    }
 
 }

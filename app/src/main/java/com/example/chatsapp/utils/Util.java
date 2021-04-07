@@ -1,10 +1,14 @@
 package com.example.chatsapp.utils;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Util {
     private FirebaseAuth firebaseAuth;
@@ -55,6 +59,13 @@ public class Util {
         } else {
             return diff / DAY_MILLIS + " days ago";
         }
+    }
+
+    public void updateOnlineStatus(String status) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(getUID());
+        Map<String, Object> map = new HashMap<>();
+        map.put("online", status);
+        databaseReference.updateChildren(map);
     }
 
 }
