@@ -1,5 +1,6 @@
 package com.example.chatsapp.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatsapp.R;
+import com.example.chatsapp.activity.MessageActivity;
 import com.example.chatsapp.databinding.ChatItemLayoutBinding;
 import com.example.chatsapp.databinding.FragmentChatBinding;
 import com.example.chatsapp.model.ChatListModel;
@@ -59,7 +61,9 @@ public class ChatFragment extends Fragment {
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<ChatListModel, ViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull ChatListModel model) {
+
                 String userID = model.getMember();
+
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users")
                         .child(userID);
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -70,6 +74,7 @@ public class ChatFragment extends Fragment {
                             String name = snapshot.child("name").getValue().toString();
                             String image = snapshot.child("image").getValue().toString();
                             String online = snapshot.child("online").getValue().toString();
+                            //
                             Calendar calendar = Calendar.getInstance();
                             try {
                                 time = Util.sdf().parse(model.getDateTime());
@@ -79,9 +84,19 @@ public class ChatFragment extends Fragment {
                             assert time != null;
                             calendar.setTime(time);
                             String date = Util.getTimeAgo(calendar.getTimeInMillis());
+                            //
                             ChatModel chatModel = new ChatModel(model.getChatListID(), name,
                                     model.getLastMessage(), image, date, online);
                             holder.binding.setChatModel(chatModel);
+
+                            holder.itemView.setOnClickListener(view -> {
+                                Intent intent = new Intent(getContext(), MessageActivity.class);
+                                intent.putExtra("hisID", userID);
+                                intent.putExtra("hisImage", image);
+                                intent.putExtra("hisName",name);
+                                intent.putExtra("chatID", model.getChatListID());
+                                startActivity(intent);
+                            });
                         }
                     }
 
@@ -104,11 +119,6 @@ public class ChatFragment extends Fragment {
         binding.recycleViewChat.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recycleViewChat.setHasFixedSize(false);
         binding.recycleViewChat.setAdapter(firebaseRecyclerAdapter);
-
-        binding.shimmerlayout.shimmerFrameLayout.stopShimmer();
-        binding.shimmerlayout.shimmerFrameLayout.setVisibility(View.GONE);
-        binding.recycleViewChat.setVisibility(View.VISIBLE);
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -117,7 +127,6 @@ public class ChatFragment extends Fragment {
         public ViewHolder(@NonNull ChatItemLayoutBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-
         }
     }
 

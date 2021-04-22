@@ -2,6 +2,7 @@ package com.example.chatsapp.fragment;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 public class VerifyNumberFragment extends Fragment {
@@ -58,7 +61,7 @@ public class VerifyNumberFragment extends Fragment {
             verificationId = bundle.getString(AllConstants.VERIFICATION_ID);
         }
 
-//        databaseReference = FirebaseDatabase.getInstance().getReference("Y");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
         binding.btVerify.setOnClickListener(v -> {
             pin = binding.pinView.getText().toString();
@@ -91,16 +94,19 @@ public class VerifyNumberFragment extends Fragment {
 
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                UserModel userModel = new UserModel("", "", "", firebaseAuth.getCurrentUser().getPhoneNumber()
-                        , firebaseAuth.getCurrentUser().getUid(), "online","false");
-                databaseReference.child(firebaseAuth.getCurrentUser().getUid()).setValue(userModel).addOnCompleteListener(task1 -> {
-                    if (task1.isSuccessful()) {
-                        getFragmentManager().beginTransaction().replace(R.id.container, new UserDataFragment()).commit();
-                    } else {
-                        Toast.makeText(getContext(), "" + task1.getException(), Toast.LENGTH_SHORT).show();
-                    }
-                });
 
+                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(data -> {
+                    String token = data.getResult().getToken();
+                    UserModel userModel = new UserModel("","","",firebaseAuth.getCurrentUser().getPhoneNumber(),
+                            firebaseAuth.getCurrentUser().getUid(),"","",token);
+                    databaseReference.child(firebaseAuth.getCurrentUser().getUid()).setValue(userModel).addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            getFragmentManager().beginTransaction().replace(R.id.container, new UserDataFragment()).commit();
+                        } else {
+                            Toast.makeText(getContext(), "" + task1.getException(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                });
             } else {
                 Toast.makeText(getContext(), "" + task.getException(), Toast.LENGTH_SHORT).show();
             }

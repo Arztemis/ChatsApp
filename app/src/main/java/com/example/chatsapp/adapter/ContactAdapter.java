@@ -59,7 +59,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             intent.putExtra("hisID", userModel.getuID());
             intent.putExtra("hisName", userModel.getName());
             intent.putExtra("hisImage", userModel.getImage());
-//            Log.d("DUCKHANH", userModel.getImage());
             mContext.startActivity(intent);
         });
     }

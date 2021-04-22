@@ -1,7 +1,9 @@
 package com.example.chatsapp.fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,6 +48,7 @@ public class ProfileFragment extends Fragment {
     private Permissons permissons;
     private AlertDialog alertDialog;
     private UserModel user;
+    private SharedPreferences.Editor sharedPreferences;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -62,6 +65,7 @@ public class ProfileFragment extends Fragment {
                 .create(ProfileViewModel.class);
 
         util = new Util();
+        sharedPreferences = getContext().getSharedPreferences("UserData", Context.MODE_PRIVATE).edit();
         permissons = new Permissons();
 
         //Đăng ký observer theo mô hình MVVM để theo dõi livedata
@@ -167,6 +171,8 @@ public class ProfileFragment extends Fragment {
             case AllConstants.CODE:
                 String name = data.getStringExtra("name");
                 profileViewModel.edtUserName(name);
+                sharedPreferences.putString("name", name).apply();
+
                 break;
         }
 
@@ -191,6 +197,7 @@ public class ProfileFragment extends Fragment {
                     public void onComplete(@NonNull Task<Uri> task) {
                         String uri = task.getResult().toString();
                         profileViewModel.editImage(uri);
+                        sharedPreferences.putString("userImage", uri).apply();
                     }
                 });
             }

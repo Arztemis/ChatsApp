@@ -1,9 +1,11 @@
 package com.example.chatsapp.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,12 @@ import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.chatsapp.BR;
 import com.example.chatsapp.R;
 import com.example.chatsapp.databinding.ActivityMessageBinding;
@@ -33,15 +41,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class MessageActivity extends AppCompatActivity {
     private ActivityMessageBinding binding;
-    private String hisID, hisImage, myID, chatID, hisName = null;
+    private String hisID, hisImage, myID, chatID, hisName, myImage = null;
     private Util util;
     private DatabaseReference databaseReference;
     private FirebaseRecyclerAdapter<MessageModel, ViewHolder> firebaseRecyclerAdapter;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +66,22 @@ public class MessageActivity extends AppCompatActivity {
     private void initView() {
         util = new Util();
         myID = util.getUID();
+        sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
+        myImage = sharedPreferences.getString("userImage", "");
 
-        hisID = getIntent().getStringExtra("hisID");
-        hisImage = getIntent().getStringExtra("hisImage");
-        hisName = getIntent().getStringExtra("hisName");
+
+        if (getIntent().hasExtra("chatID")) {
+            chatID = getIntent().getStringExtra("chatID");
+            hisImage = getIntent().getStringExtra("hisImage");
+            hisName = getIntent().getStringExtra("hisName");
+            hisID = getIntent().getStringExtra("hisID");
+            //Curios : Xài checkchat thì layout sẽ đọc setStackFromEnd, còn readMess thì không được
+            checkChat(hisID);
+        } else {
+            hisID = getIntent().getStringExtra("hisID");
+            hisName = getIntent().getStringExtra("hisName");
+            hisImage = getIntent().getStringExtra("hisImage");
+        }
 
         binding.setImage(hisImage);
         binding.setName(hisName);
@@ -74,6 +98,7 @@ public class MessageActivity extends AppCompatActivity {
             } else {
                 sendMessage(message);
                 binding.msgText.setText("");
+                getToken(message, myID, myImage, hisName, chatID);
             }
         });
 
@@ -225,13 +250,11 @@ public class MessageActivity extends AppCompatActivity {
             }
         };
 
-
         binding.recyclerViewMessage.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         binding.recyclerViewMessage.setLayoutManager(linearLayoutManager);
         binding.recyclerViewMessage.setAdapter(firebaseRecyclerAdapter);
-//        binding.recyclerViewMessage.smoothScrollToPosition(binding.recyclerViewMessage.getAdapter().getItemCount());
         firebaseRecyclerAdapter.startListening();
     }
 
@@ -289,7 +312,72 @@ public class MessageActivity extends AppCompatActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("typing", status);
         databaseReference.updateChildren(map);
-
     }
 
+    private void getToken(String message, String myID, String hisImage, String hisName, String chatID) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(hisID);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String token = snapshot.child("token").getValue().toString();
+                String name = snapshot.child("name").getValue().toString();
+
+                JSONObject to = new JSONObject();
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("title", name);
+                    data.put("message", message);
+                    data.put("hisID", myID);
+                    data.put("hisName", hisName);
+                    data.put("hisImage", hisImage);
+                    data.put("chatID", chatID);
+
+                    to.put("to", token);
+                    to.put("data", data);
+
+                    sendNotification(to);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void sendNotification(JSONObject to) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AllConstants.NOTIFICATION_URL, to,
+                response -> {
+                    Log.d("DUCKHANH", "sendNotifcation" + response);
+                },
+                error -> {
+                    Log.d("DUCKHANH", "sendNotifcation" + error);
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                //Chung ta se add SERVERKEY va APLLICATION/TYPE vao project
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", "key=" + AllConstants.SERVER_KEY);
+                map.put("Content-Type", "application/json");
+                return map;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        //Retry Policy dung de xu ly timeouts cua Volley,
+        // cho truong hop request khong duoc hoan thanh do ket noi mang hoac case khac
+        request.setRetryPolicy(new DefaultRetryPolicy(30000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(request);
+    }
 }
